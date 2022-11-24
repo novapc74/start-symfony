@@ -34,13 +34,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private const MANAGER = 'ROLE_MANAGER';
 	private const USER = 'ROLE_USER';
 
-	#[ArrayShape(['Admin' => "string", 'Manager' => 'string', 'User' => "string"])]
+	#[ArrayShape(['Администратор' => "string", 'Менеджер' => 'string', 'Пользователь' => "string"])]
 	public static function getAvailableRoles(): array
 	{
 		return [
-			'Admin' => self::ADMIN,
-			'Manager' => self::MANAGER,
-			'User' => self::USER,
+			'Администратор' => self::ADMIN,
+			'Менеджер' => self::MANAGER,
+			'Пользователь' => self::USER,
 		];
 	}
 

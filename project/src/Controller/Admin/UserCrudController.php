@@ -39,15 +39,16 @@ class UserCrudController extends AbstractCrudController
 	public function configureActions(Actions $actions): Actions
 	{
 		return $actions
-			->setPermission(Action::EDIT, User::getAvailableRoles()['Admin'])
-			->setPermission(Action::DELETE, User::getAvailableRoles()['Admin'])
+			->setPermission(Action::EDIT, User::getAvailableRoles()['Администратор'])
+			->setPermission(Action::DELETE, User::getAvailableRoles()['Администратор'])
 			->remove(Crud::PAGE_INDEX, Action::NEW)
-			->remove(Crud::PAGE_EDIT, Action::SAVE_AND_CONTINUE)
-			;
+			->remove(Crud::PAGE_EDIT, Action::SAVE_AND_CONTINUE);
 	}
 
 	public function configureFields(string $pageName): iterable
 	{
+		$roles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER'];
+
 		return [
 			IdField::new('id', 'ID')
 				->hideOnForm()
@@ -60,11 +61,7 @@ class UserCrudController extends AbstractCrudController
 			,
 			ChoiceField::new('roles', 'Роль')
 				->formatValue(fn($value, $entity) => implode('<span style="color:red"> & </span>', array_map(fn($role) => $role, $entity->getRoles())))
-				->setChoices([
-					'Администратор' => User::getAvailableRoles()['Admin'],
-					'Менеджер' => User::getAvailableRoles()['Manager'],
-					'Пользователь' => User::getAvailableRoles()['User'],
-				])
+				->setChoices(User::getAvailableRoles())
 				->allowMultipleChoices()
 				->renderExpanded()
 			,
