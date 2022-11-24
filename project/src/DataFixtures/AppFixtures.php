@@ -16,14 +16,14 @@ class AppFixtures extends BaseFixture
 
 	public function loadData(ObjectManager $manager)
 	{
-		$admin = $manager->getRepository(User::class)->findOneBy(['email' => 'novapc@ukr.net']);
+		$admin = $manager->getRepository(User::class)->findOneBy(['email' => 'admin@project.net']);
 
 		if (null === $admin) {
 			$this->createEntity(User::class, 1, function (User $user) {
 				$user
-					->setEmail('novapc@ukr.net')
+					->setEmail('admin@project.net')
 					->setRoles(["ROLE_ADMIN"])
-					->setPassword($this->passwordEncoder->hashPassword($user, 'rerecz2009'));
+					->setPassword($this->passwordEncoder->hashPassword($user, 'test2020'));
 			});
 
 			$manager->flush();

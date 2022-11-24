@@ -5,35 +5,84 @@ namespace App\Controller\Admin;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use Symfony\Component\Validator\Constraints\Length;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class UserCrudController extends AbstractCrudController
 {
-    public static function getEntityFqcn(): string
-    {
-        return User::class;
-    }
+	public static function getEntityFqcn(): string
+	{
+		return User::class;
+	}
 
 	public function configureCrud(Crud $crud): Crud
 	{
 		return $crud
 			->setEntityLabelInSingular('Пользователь')
 			->setEntityLabelInPlural('Пользователи')
-			->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
+			->setEntityLabelInSingular(
+				fn(?User $user, ?string $pageName) => $user ? $user->getUserIdentifier() : 'Пользователь'
+			)
+			->setPaginatorPageSize(20)
+			->setPaginatorRangeSize(3)
+			->setEntityPermission('ROLE_ADMIN');
 	}
 
-    public function configureFields(string $pageName): iterable
-    {
-        return [
-            IdField::new('id', 'ID')
-	        ,
-            EmailField::new('email', 'Email')
-	        ,
-	        CollectionField::new('roles', 'Роли')
-	        ->formatValue(fn($value, $entity) => implode(' 😎 ', array_map(fn($role) => $role, $entity->getRoles())))
-	        ,
-        ];
-    }
+	public function configureActions(Actions $actions): Actions
+	{
+		return $actions
+			->setPermission(Action::EDIT, User::getAvailableRoles()['Admin'])
+			->setPermission(Action::DELETE, User::getAvailableRoles()['Admin']);
+	}
+
+	public function configureFields(string $pageName): iterable
+	{
+		return [
+			IdField::new('id', 'ID')
+				->hideOnForm()
+			,
+			EmailField::new('email', 'Email')
+				->hideWhenUpdating()
+				->setColumns('col-sm-6 col-lg-5 col-xxl-3')
+			,
+			FormField::addRow()
+			,
+			TextField::new('hashPassword', 'Пароль')
+				->setFormType(PasswordType::class)
+				->setFormTypeOptions([
+					'attr' => [
+						'placeholder' => 'Введите пароль'
+					],
+					'constraints' => [
+						new Length([
+							'min' => 8
+						]),
+						new NotBlank(),
+					],
+				])
+				->hideWhenUpdating()
+				->hideOnIndex()
+				->setColumns('col-sm-6 col-lg-5 col-xxl-3')
+			,
+			FormField::addRow()
+			,
+			ChoiceField::new('roles', 'Роль')
+				->formatValue(fn($value, $entity) => implode('<span style="color:red"> & </span>', array_map(fn($role) => $role, $entity->getRoles())))
+				->setChoices([
+					'Администратор' => User::getAvailableRoles()['Admin'],
+					'Пользователь' => User::getAvailableRoles()['User'],
+				])
+				->allowMultipleChoices()
+				->renderExpanded()
+			,
+		];
+	}
 }

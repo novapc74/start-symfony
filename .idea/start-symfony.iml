@@ -148,6 +148,8 @@
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/symfony/polyfill-uuid" />
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/symfony/uid" />
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/easycorp/easyadmin-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/project/var/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/symfonycasts/verify-email-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
