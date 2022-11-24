@@ -6,11 +6,8 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -34,13 +31,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private ?bool $isVerified = false;
 
 	private const ADMIN = 'ROLE_ADMIN';
+	private const MANAGER = 'ROLE_MANAGER';
 	private const USER = 'ROLE_USER';
 
-	#[ArrayShape(['Admin' => "string", 'User' => "string"])]
+	#[ArrayShape(['Admin' => "string", 'Manager' => 'string', 'User' => "string"])]
 	public static function getAvailableRoles(): array
 	{
 		return [
 			'Admin' => self::ADMIN,
+			'Manager' => self::MANAGER,
 			'User' => self::USER,
 		];
 	}
@@ -113,25 +112,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	{
 		// If you store any temporary, sensitive data on the user, clear it here
 		// $this->plainPassword = null;
-	}
-
-	public function setHashPassword(string $plainPassword): self
-	{
-		$passwordHasherFactory = new PasswordHasherFactory([
-			PasswordAuthenticatedUserInterface::class => ['algorithm' => 'auto'],
-		]);
-		$passwordHasher        = new UserPasswordHasher($passwordHasherFactory);
-
-
-		$hashedPassword = $passwordHasher->hashPassword($this, $plainPassword);
-		$this->setPassword($hashedPassword);
-
-		return $this;
-	}
-
-	public function getHashPassword(): string
-	{
-		return $this->password;
 	}
 
 	public function isVerified(): bool

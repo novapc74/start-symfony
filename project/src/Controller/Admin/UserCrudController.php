@@ -40,7 +40,10 @@ class UserCrudController extends AbstractCrudController
 	{
 		return $actions
 			->setPermission(Action::EDIT, User::getAvailableRoles()['Admin'])
-			->setPermission(Action::DELETE, User::getAvailableRoles()['Admin']);
+			->setPermission(Action::DELETE, User::getAvailableRoles()['Admin'])
+			->remove(Crud::PAGE_INDEX, Action::NEW)
+			->remove(Crud::PAGE_EDIT, Action::SAVE_AND_CONTINUE)
+			;
 	}
 
 	public function configureFields(string $pageName): iterable
@@ -55,29 +58,11 @@ class UserCrudController extends AbstractCrudController
 			,
 			FormField::addRow()
 			,
-			TextField::new('hashPassword', 'Пароль')
-				->setFormType(PasswordType::class)
-				->setFormTypeOptions([
-					'attr' => [
-						'placeholder' => 'Введите пароль'
-					],
-					'constraints' => [
-						new Length([
-							'min' => 8
-						]),
-						new NotBlank(),
-					],
-				])
-				->hideWhenUpdating()
-				->hideOnIndex()
-				->setColumns('col-sm-6 col-lg-5 col-xxl-3')
-			,
-			FormField::addRow()
-			,
 			ChoiceField::new('roles', 'Роль')
 				->formatValue(fn($value, $entity) => implode('<span style="color:red"> & </span>', array_map(fn($role) => $role, $entity->getRoles())))
 				->setChoices([
 					'Администратор' => User::getAvailableRoles()['Admin'],
+					'Менеджер' => User::getAvailableRoles()['Manager'],
 					'Пользователь' => User::getAvailableRoles()['User'],
 				])
 				->allowMultipleChoices()
