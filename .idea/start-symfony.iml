@@ -142,6 +142,12 @@
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/jms/metadata" />
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/behat/transliterator" />
       <excludeFolder url="file://$MODULE_DIR$/project/vendor/gedmo/doctrine-extensions" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/doctrine/data-fixtures" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/doctrine/doctrine-fixtures-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/fzaninotto/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/symfony/polyfill-uuid" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/symfony/uid" />
+      <excludeFolder url="file://$MODULE_DIR$/project/vendor/easycorp/easyadmin-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
