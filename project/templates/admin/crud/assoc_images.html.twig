@@ -1,0 +1,22 @@
+<div style="display: flex">
+    {% if entity.instance.product.mediaProducts is defined %}
+
+        {% set medias = entity.instance.product.mediaProducts %}
+
+        {% for media in medias %}
+            <img src="{{ asset('upload/media/' ~ media.image.imageName) | imagine_filter('crud_admin_image') }}"
+                 alt="{{ media.image.mimeType }}"
+                 style="padding: 0 0 0 10px;">
+        {% endfor %}
+
+    {% else %}
+
+        {% for mediaProduct in entity.instance.mediaProducts %}
+            <img src="{{ asset('upload/media/' ~ mediaProduct.image.imageName) | imagine_filter('crud_admin_image') }}"
+                 alt="{{ mediaProduct.image.mimeType }}"
+                 style="padding: 0 0 0 10px;">
+        {% endfor %}
+
+    {% endif %}
+
+</div>

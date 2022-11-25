@@ -1,0 +1,18 @@
+{% if  entity.instance.image is defined %}
+    {% set data = entity.instance.image %}
+{% else %}
+    {% set data = entity.instance %}
+{% endif %}
+
+{% if data.mimeType is defined %}
+    {% if data.mimeType != "image/svg+xml" %}
+
+        <img src="{{ asset('uploads/images/' ~ data.imageName ) | imagine_filter('crud_admin_image') }}"
+             alt="{{ data.mimeType }}">
+    {% else %}
+            <img src="{{ asset('uploads/images/' ~ data.imageName) }}"
+                 alt="{{ data.mimeType }}">
+    {% endif %}
+{% endif %}
+
+{#| imagine_filter('crud_admin_image')#}

@@ -7,13 +7,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use Symfony\Component\Validator\Constraints\Length;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
-use Symfony\Component\Validator\Constraints\NotBlank;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class UserCrudController extends AbstractCrudController
@@ -33,7 +30,8 @@ class UserCrudController extends AbstractCrudController
 			)
 			->setPaginatorPageSize(20)
 			->setPaginatorRangeSize(3)
-			->setEntityPermission('ROLE_ADMIN');
+			->setEntityPermission('ROLE_ADMIN')
+			;
 	}
 
 	public function configureActions(Actions $actions): Actions
@@ -47,8 +45,6 @@ class UserCrudController extends AbstractCrudController
 
 	public function configureFields(string $pageName): iterable
 	{
-		$roles = ['ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_MODERATOR', 'ROLE_USER'];
-
 		return [
 			IdField::new('id', 'ID')
 				->hideOnForm()
@@ -60,10 +56,20 @@ class UserCrudController extends AbstractCrudController
 			FormField::addRow()
 			,
 			ChoiceField::new('roles', 'Роль')
-				->formatValue(fn($value, $entity) => implode('<span style="color:red"> & </span>', array_map(fn($role) => $role, $entity->getRoles())))
+				->formatValue(
+					fn($value, $entity) => implode(
+						'<span style="color:red"> & </span>',
+						array_map(
+							fn($role) => array_search($role, User::getAvailableRoles()),
+							$entity->getRoles()
+						)
+					)
+				)
 				->setChoices(User::getAvailableRoles())
 				->allowMultipleChoices()
 				->renderExpanded()
+			,
+			BooleanField::new('isVerified', 'Верификация')
 			,
 		];
 	}

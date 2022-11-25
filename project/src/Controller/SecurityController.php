@@ -9,12 +9,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-	#[Route('/', name: 'index')]
-	public function index(): Response
-	{
-		return $this->redirectToRoute('app_login');
-	}
-
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
