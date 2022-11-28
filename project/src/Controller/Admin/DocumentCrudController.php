@@ -6,6 +6,7 @@ use App\Entity\Document;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
@@ -41,6 +42,8 @@ class DocumentCrudController extends AbstractCrudController
 			,
 			TextEditorField::new('description', 'Описание')
 				->setHelp('В текущем поле заполните содержание тела документа.')
+			,
+			BooleanField::new('isVisible', 'Видимый.')
 			,
 		];
 	}

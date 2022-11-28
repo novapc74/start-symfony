@@ -26,7 +26,7 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 ###> liip/imagine-bundle ###
-/public/media/cache/
+/public/media_cache/
 ###< liip/imagine-bundle ###
 
 src/Controller/TestController.php

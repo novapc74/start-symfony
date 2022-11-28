@@ -19,8 +19,7 @@ class Document
 	#[ORM\Column]
 	private ?int $id = null;
 
-//	#[Assert\Unique] // TODO нормально не валидирует... попробовать в админке...
-	#[ORM\Column(length: 255, unique: true)]
+	#[ORM\Column(length: 255)]
 	private ?string $title = null;
 
 	#[ORM\Column(length: 255)]
@@ -29,6 +28,9 @@ class Document
 
 	#[ORM\Column(type: Types::TEXT)]
 	private ?string $description = null;
+
+	#[ORM\Column(type: 'boolean')]
+	private ?bool $isVisible = false;
 
 	private const PRIVACY = 'Пользовательское соглашение';
 	private const DELIVERY = 'Доставка';
@@ -88,6 +90,18 @@ class Document
 	public function setDescription(string $description): self
 	{
 		$this->description = $description;
+
+		return $this;
+	}
+
+	public function isVisible(): ?bool
+	{
+		return $this->isVisible;
+	}
+
+	public function setIsVisible(?bool $isVisible): self
+	{
+		$this->isVisible = $isVisible;
 
 		return $this;
 	}
