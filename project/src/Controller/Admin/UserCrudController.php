@@ -58,7 +58,7 @@ class UserCrudController extends AbstractCrudController
 			ChoiceField::new('roles', 'Роль')
 				->formatValue(
 					fn($value, $entity) => implode(
-						'<span style="color:red"> & </span>',
+						'<span style="color:red; font-weight: bold"> & </span>',
 						array_map(
 							fn($role) => array_search($role, User::getAvailableRoles()),
 							$entity->getRoles()
