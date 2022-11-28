@@ -22,7 +22,6 @@ class DocumentCrudController extends AbstractCrudController
 		return [
 			TextField::new('title', 'Заголовок')
 				->hideOnForm(),
-			// TODO валидацию для уникальности title...
 			ChoiceField::new('title')
 				->hideOnIndex()
 				->setFormTypeOptions([

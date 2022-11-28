@@ -30,8 +30,7 @@ class UserCrudController extends AbstractCrudController
 			)
 			->setPaginatorPageSize(20)
 			->setPaginatorRangeSize(3)
-			->setEntityPermission('ROLE_ADMIN')
-			;
+			->setEntityPermission('ROLE_ADMIN');
 	}
 
 	public function configureActions(Actions $actions): Actions
